@@ -9,6 +9,8 @@ Practical examples for using house agents in real-world scenarios.
   - [House Bash Examples](#house-bash-examples)
   - [House Git Examples](#house-git-examples)
   - [House MCP Examples](#house-mcp-examples)
+  - [House Coder Examples](#house-coder-examples)
+  - [House Planner Examples](#house-planner-examples)
 - [Multi-Agent Workflows](#multi-agent-workflows)
 - [Common Patterns](#common-patterns)
 - [Anti-Patterns](#anti-patterns)
@@ -501,6 +503,340 @@ await sendEmail(
 - Free tier: 100 emails/day
 
 **Need more?** Ask about: templates, attachments, tracking, webhooks
+```
+
+---
+
+### House Coder Examples
+
+#### Example 1: Implementing a TODO Comment
+
+**You:**
+```
+Use house-coder to implement the TODO in auth.py for email validation
+```
+
+**House Coder Agent Returns:**
+```
+## Code Changes: Email Validation Implementation
+
+### Status
+✅ Success
+
+### Summary
+Implemented email validation in the register_user function. Added regex pattern matching and error handling for invalid email formats.
+
+### Files Modified
+- `auth/auth.py` - Added email validation logic
+- `tests/test_auth.py` - Added validation test cases
+
+### Key Changes
+
+**1. Email Validation in register_user**
+Location: `auth/auth.py:23-27`
+```python
+import re
+
+def register_user(email, password):
+    if not re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', email):
+        raise ValueError("Invalid email format")
+    # ... rest of registration logic
+```
+Rationale: Prevents registration with malformed email addresses
+
+**2. Test Coverage**
+Location: `tests/test_auth.py:45-52`
+```python
+def test_invalid_email_validation():
+    with pytest.raises(ValueError, match="Invalid email format"):
+        register_user("invalid-email", "password123")
+
+def test_valid_email_passes():
+    result = register_user("user@example.com", "password123")
+    assert result is not None
+```
+Rationale: Ensures validation works correctly
+
+### Tests
+- ✅ Syntax check: Passed
+- ✅ Import check: Passed
+- ✅ Quick tests: 2/2 new tests passed
+
+### Recommendations
+- Consider using email-validator library for more robust validation
+- Add integration test for full registration flow
+
+### Token Savings
+Processed ~8,200 tokens → Returned ~780 tokens (~90% savings)
+```
+
+---
+
+#### Example 2: Fixing Import Errors
+
+**You:**
+```
+Use house-coder to fix the import errors in utils.py
+```
+
+**House Coder Agent Returns:**
+```
+## Code Changes: Import Error Fixes
+
+### Status
+✅ Success
+
+### Summary
+Fixed 3 import errors in utils.py by updating module paths to match new project structure.
+
+### Files Modified
+- `utils/utils.py` - Corrected import statements
+
+### Key Changes
+
+**1. Updated Import Paths**
+Location: `utils/utils.py:1-5`
+```python
+# Before:
+from helpers import format_date
+from validators import check_email
+
+# After:
+from lib.helpers import format_date
+from lib.validators import check_email
+```
+Rationale: Modules were moved to lib/ directory in recent refactor
+
+### Tests
+- ✅ Syntax check: Passed
+- ✅ Import check: All imports resolved
+- ⚠️ Tests not run (no test file found for utils.py)
+
+### Recommendations
+- Consider adding tests for utils.py functions
+- Verify format_date and check_email work as expected in new structure
+
+### Token Savings
+Processed ~2,100 tokens → Returned ~420 tokens (~80% savings)
+```
+
+---
+
+#### Example 3: Adding Error Handling
+
+**You:**
+```
+Use house-coder to add try-catch error handling to the login function
+```
+
+**House Coder Agent Returns:**
+```
+## Code Changes: Error Handling for Login Function
+
+### Status
+✅ Success
+
+### Summary
+Wrapped login logic in try-except blocks to handle authentication errors gracefully and added proper logging.
+
+### Files Modified
+- `api/auth.py` - Added error handling to login function
+- `utils/logger.py` - Added auth error logging format
+
+### Key Changes
+
+**1. Login Error Handling**
+Location: `api/auth.py:34-47`
+```python
+def login(username, password):
+    try:
+        user = authenticate(username, password)
+        if not user:
+            logger.warning(f"Failed login attempt for user: {username}")
+            return None
+
+        token = generate_session_token(user.id)
+        return {"user": user, "token": token}
+
+    except AuthenticationError as e:
+        logger.error(f"Authentication error for {username}: {e}")
+        return None
+    except DatabaseError as e:
+        logger.critical(f"Database error during login: {e}")
+        raise
+```
+Rationale: Prevents unhandled exceptions and provides better error visibility
+
+### Tests
+- ✅ Syntax check: Passed
+- ✅ Import check: Passed
+- ✅ Existing tests: 5/5 passed
+
+### Recommendations
+- Add specific tests for each error case (AuthenticationError, DatabaseError)
+- Consider rate limiting for failed login attempts
+
+### Token Savings
+Processed ~5,800 tokens → Returned ~690 tokens (~88% savings)
+```
+
+---
+
+### House Planner Examples
+
+#### Example 1: Planning New Feature Development
+
+**You:**
+```
+Use house-planner to plan adding a user authentication system with JWT tokens
+```
+
+**House Planner Agent Returns:**
+```
+## Execution Plan: JWT Authentication System
+
+### Overview
+Implementing JWT-based authentication with token generation, validation, and refresh functionality. System will replace existing session-based auth.
+
+### Clarifications & Assumptions
+- **Assumption**: Using PyJWT library (already in requirements.txt)
+- **Assumption**: Tokens expire after 24 hours, refresh tokens after 7 days
+- **Assumption**: Keeping backward compatibility with existing user model
+- **Clarification Needed**: Should we support multiple active sessions per user?
+
+### Task Breakdown
+
+**Task 1: Research existing authentication patterns**
+- **Agent**: house-research
+- **Scope**: Find all auth-related code in codebase
+- **Complexity**: Low
+- **Estimated Lines**: N/A (research only)
+- **Context for Agent**: "Search for authentication, login, session management patterns. Focus on api/auth.py, models/user.py, and middleware/auth.py"
+- **Dependencies**: None
+
+**Task 2: Create JWT utilities module**
+- **Agent**: house-coder
+- **Scope**: Create auth/jwt_utils.py with token generation and validation
+- **Complexity**: Medium (80 lines)
+- **Estimated Lines**: 80
+- **Context for Agent**: "Create jwt_utils.py with: generate_token(user_id, expiry_hours), validate_token(token), refresh_token(old_token). Use PyJWT, handle expiration, signature validation. Follow error handling pattern from auth/password.py"
+- **Dependencies**: Task 1 (informed by research)
+
+**Task 3: Add JWT fields to User model**
+- **Agent**: house-coder
+- **Scope**: Update models/user.py and create migration
+- **Complexity**: Low (30 lines)
+- **Estimated Lines**: 30
+- **Context for Agent**: "Add 'refresh_token' and 'refresh_token_expiry' fields to User model. Create alembic migration. Follow pattern in models/user.py for field definitions"
+- **Dependencies**: None (parallel with Task 2)
+
+**Task 4: Update login endpoint**
+- **Agent**: house-coder
+- **Scope**: Modify api/auth.py login to return JWT tokens
+- **Complexity**: Medium (60 lines)
+- **Estimated Lines**: 60
+- **Context for Agent**: "Update POST /api/auth/login to generate and return JWT access token + refresh token. Store refresh token in DB. Match response format: {access_token, refresh_token, expires_in}"
+- **Dependencies**: Task 2, Task 3
+
+**Task 5: Create token refresh endpoint**
+- **Agent**: house-coder
+- **Scope**: Add POST /api/auth/refresh endpoint
+- **Complexity**: Low (40 lines)
+- **Estimated Lines**: 40
+- **Context for Agent**: "Create refresh endpoint that validates refresh token, generates new access token. Follow existing endpoint pattern in api/auth.py"
+- **Dependencies**: Task 4
+
+**Task 6: Update authentication middleware**
+- **Agent**: house-coder
+- **Scope**: Modify middleware/auth.py to validate JWT tokens
+- **Complexity**: Medium (70 lines)
+- **Estimated Lines**: 70
+- **Context for Agent**: "Update auth middleware to check Authorization: Bearer header, validate JWT token, set user context. Handle expired tokens gracefully"
+- **Dependencies**: Task 2
+
+**Task 7: Add comprehensive tests**
+- **Agent**: house-coder
+- **Scope**: Create tests for all JWT functionality
+- **Complexity**: High (150 lines)
+- **Estimated Lines**: 150
+- **Context for Agent**: "Add tests in tests/test_jwt.py covering: token generation, validation, expiration, refresh flow, invalid tokens, missing tokens. Follow test pattern in tests/test_auth.py"
+- **Dependencies**: Task 6
+
+**Task 8: Run test suite**
+- **Agent**: house-bash
+- **Scope**: Execute full test suite with coverage
+- **Complexity**: Low
+- **Context for Agent**: "Run 'uv run pytest tests/ -v --cov=auth --cov=api' and report results"
+- **Dependencies**: Task 7
+
+### Execution Sequence
+
+**Phase 1: Research & Setup** (Parallel)
+- Task 1 (research)
+- Task 3 (DB migration)
+
+**Phase 2: Core Implementation** (Sequential)
+- Task 2 (JWT utils) → Task 4 (login) → Task 5 (refresh) → Task 6 (middleware)
+
+**Phase 3: Testing & Verification**
+- Task 7 (tests) → Task 8 (run tests)
+
+**Total Estimated Scope**: ~420 lines of new code
+**Estimated Complexity**: Medium-High
+**Estimated Time**: 3-4 hours
+
+### Files to be Created/Modified
+- `auth/jwt_utils.py` (new, ~80 lines)
+- `migrations/004_add_jwt_fields.py` (new, ~30 lines)
+- `models/user.py` (modified, +10 lines)
+- `api/auth.py` (modified, ~100 lines)
+- `middleware/auth.py` (modified, ~70 lines)
+- `tests/test_jwt.py` (new, ~150 lines)
+
+### Risks & Considerations
+- **Breaking Change**: Existing session-based clients will need updates
+- **Security**: Ensure tokens stored securely, no exposure in logs
+- **Performance**: Token validation on every request - consider caching
+
+### Recommendations for Main Claude
+1. Execute Phase 1 tasks in parallel
+2. After Task 2, review JWT implementation for security best practices
+3. After Task 8, if tests pass, plan deployment strategy
+4. Consider adding rate limiting to login/refresh endpoints
+5. Document token format and authentication flow for API consumers
+```
+
+---
+
+#### Example 2: Planning Large Refactoring
+
+**You:**
+```
+Use house-planner to plan refactoring the entire API layer from synchronous to async/await
+```
+
+**House Planner Agent Returns:**
+```
+## Execution Plan: Async/Await API Refactoring
+
+### Overview
+Convert synchronous Flask API to asynchronous FastAPI using async/await patterns. This is a large architectural change requiring careful coordination.
+
+### Clarifications & Assumptions
+- **Question for User**: Do you want to migrate to FastAPI or add async support to Flask with Quart?
+  - Option A: FastAPI (cleaner async, better performance, breaking changes)
+  - Option B: Quart (minimal code changes, maintains Flask compatibility)
+- **Assumption**: Using async database driver (asyncpg for PostgreSQL)
+- **Assumption**: Gradual migration - run both sync and async endpoints during transition
+
+*[Planner would wait for user's framework choice before continuing with detailed plan]*
+
+### Recommendations
+This is a complex refactoring (500+ lines across 15+ files). Consider:
+1. Breaking into smaller phases (auth endpoints → user endpoints → admin endpoints)
+2. Running both sync and async versions in parallel during migration
+3. Comprehensive integration testing at each phase
+4. Main Claude should coordinate this as a multi-sprint effort
 ```
 
 ---

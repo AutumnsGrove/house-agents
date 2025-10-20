@@ -32,12 +32,14 @@ This "context pollution" reduces Claude's effectiveness and wastes tokens.
 >
 > Total: 187,000 tokens quarantined, ~5,000 added to main context
 
-### The Four House Agents
+### The Six House Agents
 
 1. **🔍 House Research** - File and documentation search specialist
 2. **🔀 House Git** - Git diff and commit analysis specialist
 3. **⚡ House Bash** - Command execution and output parsing specialist
 4. **🔧 House MCP** - MCP tool configuration and documentation specialist
+5. **🔵 House Coder** - Small code patch execution specialist (0-250 lines)
+6. **🟣 House Planner** - Task orchestration and planning specialist
 
 See [Future Agents](#future-agents) for planned additions (house-vision, house-data).
 
@@ -256,6 +258,54 @@ All in condensed format (3k-8k tokens total instead of 50k+).
 - Critical gotchas only (deal-breakers, not nice-to-haves)
 - Progressive disclosure (summary first, details on request)
 - Condensed documentation summaries
+
+### 🔵 House Coder
+
+**Use For:**
+- Implementing small code changes (0-250 lines)
+- Fixing import errors and dependency issues
+- Implementing TODO comments
+- Small bug fixes and feature additions
+- Applying code review suggestions
+- Refactoring code sections
+
+**Example Invocations:**
+```
+"Use house-coder to fix the import error in utils.py"
+"Use house-coder to implement the TODO in auth.py"
+"Use house-coder to add error handling to the login function"
+```
+
+**What It Returns:**
+- Condensed summary of changes made
+- Key code snippets (not full files)
+- Test results and verification
+- Recommendations for follow-up work
+- Real token savings: 85-90% reduction (5k-15k tokens → 500-1.5k tokens)
+
+### 🟣 House Planner
+
+**Use For:**
+- Complex multi-file changes requiring coordination
+- New feature development with ambiguous requirements
+- Large refactoring planning
+- Creating detailed execution plans with dependencies
+- Clarifying requirements through smart questioning
+
+**Example Invocations:**
+```
+"Use house-planner to plan adding user authentication with JWT"
+"Use house-planner to plan refactoring the API layer to async/await"
+"Use house-planner to plan building a data export feature"
+```
+
+**What It Returns:**
+- Detailed execution plan with task breakdown
+- Dependency chains and sequencing
+- Complexity estimates (lines of code, effort)
+- Clarifying questions for ambiguous requirements
+- Perfect context for execution agents (house-coder, house-research, etc.)
+- File impact analysis
 
 **Note:** House MCP automatically inherits all MCP tools configured in your environment. No setup needed - it works with whatever servers you have.
 
