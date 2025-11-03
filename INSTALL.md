@@ -15,13 +15,13 @@ Install agents in your current project only (`.claude/agents/` directory).
 **Copy this into Claude Code:**
 
 ```
-Clone https://github.com/houseworthe/house-agents to /tmp/house-agents, then copy the .claude directory to my current project. Verify the four agent files exist (.claude/agents/house-research.md, house-git.md, house-bash.md, house-mcp.md), then test house-research by finding all TODO comments in the codebase.
+Clone https://github.com/houseworthe/house-agents to /tmp/house-agents, then copy the .claude directory to my current project. Verify the six agent files exist (.claude/agents/house-research.md, house-git.md, house-bash.md, house-mcp.md, house-coder.md, house-planner.md), then test house-research by finding all TODO comments in the codebase.
 ```
 
 **What this does:**
 1. Clones house-agents to /tmp/house-agents
 2. Copies .claude/ directory to your current project
-3. Verifies all 4 agent files are present
+3. Verifies all 6 agent files are present
 4. Tests house-research agent to confirm it works
 
 **When to use:** You want agents only for this specific project, or you want to customize agents per-project.
@@ -41,7 +41,7 @@ Clone https://github.com/houseworthe/house-agents to /tmp/house-agents. Create ~
 **What this does:**
 1. Clones house-agents to /tmp/house-agents
 2. Creates ~/.claude/agents/ if needed
-3. Copies all 4 agent files to ~/.claude/agents/
+3. Copies all 6 agent files to ~/.claude/agents/
 4. Lists installed agents
 5. Tests house-research to confirm it works
 
@@ -78,7 +78,7 @@ cp -r /tmp/house-agents/.claude .
 
 # Verify installation
 ls .claude/agents/
-# Should show: house-bash.md, house-git.md, house-research.md
+# Should show: house-bash.md, house-coder.md, house-git.md, house-mcp.md, house-planner.md, house-research.md
 ```
 
 #### User-Wide Installation
@@ -94,7 +94,7 @@ cp /tmp/house-agents/.claude/agents/*.md ~/.claude/agents/
 
 # Verify installation
 ls ~/.claude/agents/
-# Should show: house-bash.md, house-git.md, house-research.md
+# Should show: house-bash.md, house-coder.md, house-git.md, house-mcp.md, house-planner.md, house-research.md
 ```
 
 ### Step 3: Verify Installation
@@ -109,6 +109,9 @@ You should see:
 - house-research
 - house-git
 - house-bash
+- house-mcp
+- house-coder
+- house-planner
 
 Alternatively, use the `/agents` command in Claude Code.
 
@@ -145,6 +148,18 @@ Use house-mcp to help me understand how to configure an MCP server
 ```
 Expected: Minimal example config with usage instructions
 
+**Test house-coder:**
+```
+Use house-coder to add a comment at the top of the main file explaining what it does
+```
+Expected: Condensed summary with code snippet showing the change
+
+**Test house-planner:**
+```
+Use house-planner to create a plan for adding input validation to our forms
+```
+Expected: Detailed execution plan with task breakdown and agent assignments
+
 ---
 
 ## 🔧 Installation Methods Comparison
@@ -167,6 +182,8 @@ After installation, verify everything works:
 - [ ] house-bash parses command output correctly
 - [ ] house-git analyzes git diffs correctly
 - [ ] house-mcp returns minimal config examples
+- [ ] house-coder returns condensed code change summaries
+- [ ] house-planner creates detailed execution plans
 - [ ] No syntax errors in agent files
 
 ---

@@ -9,6 +9,8 @@ Practical examples for using house agents in real-world scenarios.
   - [House Bash Examples](#house-bash-examples)
   - [House Git Examples](#house-git-examples)
   - [House MCP Examples](#house-mcp-examples)
+  - [House Coder Examples](#house-coder-examples)
+  - [House Planner Examples](#house-planner-examples)
 - [Multi-Agent Workflows](#multi-agent-workflows)
 - [Common Patterns](#common-patterns)
 - [Anti-Patterns](#anti-patterns)
@@ -501,6 +503,306 @@ await sendEmail(
 - Free tier: 100 emails/day
 
 **Need more?** Ask about: templates, attachments, tracking, webhooks
+```
+
+---
+
+### House Coder Examples
+
+#### Example 1: Fixing Import Errors
+
+**You:**
+```
+Use house-coder to fix the import error in utils.py
+```
+
+**House Coder Agent Returns:**
+```
+## Code Changes: Fixed Import Error in utils.py
+
+### Status
+✅ Success
+
+### Summary
+Fixed ModuleNotFoundError by updating import path to include 'lib.' prefix.
+
+### Files Modified
+- `src/utils.py` - Updated import statement
+
+### Key Changes
+
+**1. Import Path Correction**
+Location: `src/utils.py:3`
+```python
+# Before: from utils import process_data
+from lib.utils import process_data
+```
+Rationale: Module is located in lib/ directory, not root
+
+### Tests
+- ✅ Syntax check: Passed
+- ✅ Import check: Passed
+
+### Token Savings
+Processed ~2,500 tokens → Returned ~400 tokens (84% savings)
+```
+
+---
+
+#### Example 2: Implementing TODO Comments
+
+**You:**
+```
+Use house-coder to implement the TODO comment in authentication.py for email validation
+```
+
+**House Coder Agent Returns:**
+```
+## Code Changes: Implemented Email Validation
+
+### Status
+✅ Success
+
+### Summary
+Added regex-based email validation as requested in TODO comment. Raises ValueError for invalid formats.
+
+### Files Modified
+- `src/auth/authentication.py` - Added validation function
+- `tests/test_authentication.py` - Added validation tests
+
+### Key Changes
+
+**1. Email Validation Function**
+Location: `src/auth/authentication.py:45-49`
+```python
+def validate_email(email: str) -> bool:
+    pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+    if not re.match(pattern, email):
+        raise ValueError(f"Invalid email format: {email}")
+    return True
+```
+Rationale: Implements TODO for email format validation
+
+**2. Test Coverage**
+Location: `tests/test_authentication.py:67-71`
+```python
+def test_email_validation():
+    assert validate_email("user@example.com")
+    with pytest.raises(ValueError):
+        validate_email("invalid-email")
+```
+Rationale: Added tests to ensure validation works correctly
+
+### Tests
+- ✅ Syntax check: Passed
+- ✅ Quick tests: 2/2 passed
+
+### Recommendations
+- Consider using dedicated library like email-validator for production
+- Add tests for edge cases (international domains, etc.)
+
+### Token Savings
+Processed ~8,200 tokens → Returned ~650 tokens (92% savings)
+```
+
+---
+
+#### Example 3: Small Bug Fix
+
+**You:**
+```
+Use house-coder to fix the off-by-one error in pagination.py
+```
+
+**House Coder Agent Returns:**
+```
+## Code Changes: Fixed Pagination Off-by-One Error
+
+### Status
+✅ Success
+
+### Summary
+Corrected range calculation in get_page_numbers() to prevent extra empty page.
+
+### Files Modified
+- `src/pagination.py` - Fixed range calculation
+
+### Key Changes
+
+**1. Range Calculation Fix**
+Location: `src/pagination.py:23`
+```python
+# Before: range(0, total_pages + 1)
+for page in range(0, total_pages):
+```
+Rationale: range(0, N) already gives N elements (0 to N-1), +1 created extra page
+
+### Tests
+- ✅ Syntax check: Passed
+- ✅ Import check: Passed
+- ✅ Quick tests: 5/5 passed
+
+### Token Savings
+Processed ~1,800 tokens → Returned ~320 tokens (82% savings)
+```
+
+---
+
+### House Planner Examples
+
+#### Example 1: Planning JWT Authentication
+
+**You:**
+```
+Use house-planner to create a plan for adding JWT authentication to the API
+```
+
+**House Planner Agent Returns:**
+```
+## Execution Plan: JWT Authentication System
+
+### Overview
+Implement JWT-based authentication for API endpoints with token generation, validation, and middleware.
+
+### Clarifications & Assumptions
+- **Assumption**: Using PyJWT library (adding to requirements.txt)
+- **Assumption**: Tokens valid for 24 hours
+- **Assumption**: Keeping existing password hashing, adding JWT layer
+
+### Task Breakdown
+
+**Task 1: Research existing auth patterns**
+- **Agent**: house-research
+- **Scope**: Find current authentication and user model code
+- **Complexity**: Low
+- **Estimated Lines**: N/A (research only)
+- **Context for Agent**: "Find all auth-related code: login/logout, password hashing, User model. Focus on auth/ and models/ directories."
+- **Dependencies**: None
+
+**Task 2: Install JWT library**
+- **Agent**: house-bash
+- **Scope**: Add PyJWT to requirements.txt and install
+- **Complexity**: Low
+- **Estimated Lines**: 1
+- **Context for Agent**: "Add 'PyJWT==2.8.0' to requirements.txt, then run pip install -r requirements.txt"
+- **Dependencies**: None
+
+**Task 3: Create JWT utilities module**
+- **Agent**: house-coder
+- **Scope**: Create auth/jwt_utils.py with generate/validate functions
+- **Complexity**: Medium (60 lines)
+- **Estimated Lines**: 60
+- **Context for Agent**: "Create auth/jwt_utils.py with generate_token(user_id) and validate_token(token) functions. Use PyJWT. Follow error handling pattern from auth/password.py."
+- **Dependencies**: Task 2 (needs library installed)
+
+**Task 4: Update login endpoint**
+- **Agent**: house-coder
+- **Scope**: Modify login to return JWT token
+- **Complexity**: Low (30 lines)
+- **Estimated Lines**: 30
+- **Context for Agent**: "Update POST /api/auth/login to generate JWT token after password validation. Return token in response JSON."
+- **Dependencies**: Task 3 (needs JWT utilities)
+
+**Task 5: Create auth middleware**
+- **Agent**: house-coder
+- **Scope**: Add middleware to validate JWT on protected routes
+- **Complexity**: Medium (50 lines)
+- **Estimated Lines**: 50
+- **Context for Agent**: "Create middleware/auth.py that validates JWT tokens. Extract user_id from token, attach to request. Return 401 for invalid tokens."
+- **Dependencies**: Task 3 (needs JWT utilities)
+
+**Task 6: Add tests**
+- **Agent**: house-coder
+- **Scope**: Test JWT generation, validation, and middleware
+- **Complexity**: Medium (80 lines)
+- **Estimated Lines**: 80
+- **Context for Agent**: "Add tests for: token generation, token validation, expired tokens, invalid tokens, middleware. Follow test pattern in tests/test_auth.py."
+- **Dependencies**: Tasks 3, 4, 5 (needs all components)
+
+**Task 7: Run test suite**
+- **Agent**: house-bash
+- **Scope**: Execute pytest and verify all tests pass
+- **Complexity**: Low
+- **Estimated Lines**: N/A
+- **Context for Agent**: "Run 'pytest tests/test_auth.py -v' and verify all JWT tests pass"
+- **Dependencies**: Task 6 (needs tests)
+
+### Execution Sequence
+**Parallel Track 1:** Task 1 (research) → informs Tasks 3-5
+**Parallel Track 2:** Task 2 (install) → Task 3 (JWT utils) → Task 4 (login), Task 5 (middleware) → Task 6 (tests) → Task 7 (run tests)
+
+**Total Estimated Scope**: ~220 lines of code
+**Estimated Complexity**: Medium
+**Risks**: None identified
+
+### Files to be Created/Modified
+- `requirements.txt` (modified, +1 line)
+- `auth/jwt_utils.py` (new, ~60 lines)
+- `api/auth.py` (modified, ~30 lines)
+- `middleware/auth.py` (new, ~50 lines)
+- `tests/test_auth.py` (modified, ~80 lines)
+
+### Recommendations
+1. Execute research task first to understand current auth structure
+2. Install library before implementing JWT utilities
+3. Run tests after each major component
+4. Consider adding rate limiting to login endpoint (future task)
+```
+
+---
+
+#### Example 2: Planning Database Migration
+
+**You:**
+```
+Use house-planner to plan migrating our database from SQLite to PostgreSQL
+```
+
+**House Planner Agent Returns:**
+```
+## Execution Plan: SQLite to PostgreSQL Migration
+
+### Overview
+Migrate application from SQLite to PostgreSQL with schema conversion, data migration, and connection updates.
+
+### Clarifications & Assumptions
+- **Assumption**: Using psycopg2 for PostgreSQL connection
+- **Assumption**: Development environment migration first, production later
+- **Assumption**: Keeping existing ORM/query patterns
+
+### Task Breakdown
+
+**Task 1: Audit current database schema**
+- **Agent**: house-research
+- **Scope**: Find all database models and SQL files
+- **Complexity**: Low
+- **Estimated Lines**: N/A
+- **Context for Agent**: "Find all database models, schema files, and raw SQL queries. Look in models/, migrations/, and search for 'CREATE TABLE', 'ALTER TABLE'."
+- **Dependencies**: None
+
+**Task 2: Install PostgreSQL adapter**
+- **Agent**: house-bash
+- **Scope**: Install psycopg2-binary
+- **Complexity**: Low
+- **Estimated Lines**: N/A
+- **Context for Agent**: "Add psycopg2-binary to requirements.txt and install"
+- **Dependencies**: None
+
+**Task 3: Create PostgreSQL schema**
+- **Agent**: house-coder
+- **Scope**: Convert SQLite schema to PostgreSQL
+- **Complexity**: High (150 lines)
+- **Estimated Lines**: 150
+- **Context for Agent**: "Create migrations/postgresql_schema.sql converting SQLite schema to PostgreSQL. Update data types: INTEGER→INT, TEXT→VARCHAR, AUTOINCREMENT→SERIAL. Add proper indexes."
+- **Dependencies**: Task 1 (needs schema audit)
+
+[... more tasks ...]
+
+### Recommendations
+1. Test migration on development copy first
+2. Create data backup before production migration
+3. Plan for downtime window
+4. Consider using migration tool like Alembic for future schema changes
 ```
 
 ---

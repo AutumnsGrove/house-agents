@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2025-11-02
+
+### Added
+- **house-coder agent** - Small code patch execution specialist (5th production agent)
+  - Implements surgical code changes (0-250 lines) with speed and precision
+  - Handles import fixes, TODO implementations, small bug fixes, and feature additions
+  - Returns condensed summaries with key code snippets (85-90% token savings)
+  - Uses Claude Haiku 4.5 for fast execution
+  - Auto-invokes for common patterns (import errors, TODO comments, small bugs)
+
+- **house-planner agent** - Task orchestration and planning specialist (6th production agent)
+  - Analyzes complex requirements and creates detailed execution plans
+  - Asks clarifying questions for ambiguous requirements
+  - Breaks down tasks with agent assignments and dependency chains
+  - Estimates complexity and identifies risks
+  - **Uses Claude Sonnet 4.5** (not Haiku) for complex architectural reasoning
+  - Provides perfect context for other house agents to execute
+
+### Changed
+- **Expanded from 4 to 6 production agents** - Added house-coder and house-planner
+- **Mixed model architecture** - Most agents use Haiku 4.5, but house-planner uses Sonnet 4.5 for planning tasks
+- Updated all documentation to reference six agents:
+  - README.md: "The Six House Agents" with descriptions for house-coder and house-planner
+  - USAGE.md: Added example workflows for both new agents
+  - INSTALL.md: Updated file counts, verification steps, and testing instructions
+- Model Architecture section now documents house-planner's use of Sonnet 4.5
+
+### Documentation
+- Added house-coder examples: import fixes, TODO implementation, bug fixes
+- Added house-planner examples: JWT authentication planning, database migration planning
+- Updated testing instructions for both new agents
+- Condensed agent file sizes to match existing style (house-coder: 150 lines, house-planner: 161 lines)
+
 ## [1.0.0] - 2025-10-19
 
 ### 🎉 Stable Release
@@ -92,7 +125,8 @@ House Agents moves to v1.0.0 after successful production validation. All core ag
 - Token savings calculations
 - Troubleshooting guide
 
-[Unreleased]: https://github.com/houseworthe/house-agents/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/houseworthe/house-agents/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/houseworthe/house-agents/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/houseworthe/house-agents/compare/v0.2.0-beta...v1.0.0
 [0.2.0-beta]: https://github.com/houseworthe/house-agents/compare/v0.1.0-beta...v0.2.0-beta
 [0.1.0-beta]: https://github.com/houseworthe/house-agents/releases/tag/v0.1.0-beta
