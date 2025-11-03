@@ -8,6 +8,8 @@
 
 Specialized Claude Code sub-agents for context-efficient workflows. Keep your main conversation clean while delegating heavy operations to specialized "house agents."
 
+> **Featured in:** [800+ hours of Learning Claude Code in 8 minutes](https://youtu.be/Ffh9OeJ7yxw) by Edmond Yong
+
 ## The Problem
 
 When working on complex tasks in Claude Code, your context window fills up with:
