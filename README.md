@@ -34,32 +34,30 @@ This "context pollution" reduces Claude's effectiveness and wastes tokens.
 >
 > Total: 187,000 tokens quarantined, ~5,000 added to main context
 
-### The Six House Agents
+### The Five House Agents
 
 1. **🔍 House Research** - File and documentation search specialist
 2. **🔀 House Git** - Git diff and commit analysis specialist
 3. **⚡ House Bash** - Command execution and output parsing specialist
 4. **🔧 House MCP** - MCP tool configuration and documentation specialist
 5. **💻 House Coder** - Small code patch execution specialist
-6. **🏗️ House Planner** - Task orchestration and planning specialist
 
 See [Future Agents](#future-agents) for planned additions (house-vision, house-data).
 
 ### Model Architecture
 
 **Main Claude**: Uses your selected model (Sonnet 4.5, Opus, etc.)
-**Sub-agents**: Mostly use Claude Haiku 4.5 for cost-efficiency and speed
-**Exception**: house-planner uses Sonnet 4.5 for complex planning and reasoning
+**Sub-agents**: Use Claude Haiku 4.5 for cost-efficiency and speed
 
-Sub-agents perform specialized, focused tasks (grep, bash parsing, git analysis, code patches) where Haiku 4.5's performance (90% of Sonnet 4.5's agentic coding capability) is more than sufficient. For planning tasks requiring deeper architectural reasoning, house-planner uses Sonnet 4.5. This architecture provides:
+Sub-agents perform specialized, focused tasks (grep, bash parsing, git analysis, code patches) where Haiku 4.5's performance (90% of Sonnet 4.5's agentic coding capability) is more than sufficient. This architecture provides:
 
-- **67% cost savings** on most sub-agent operations ($1/$5 vs $3/$15 per million tokens)
-- **2x faster** response times compared to Sonnet 4 for execution agents
+- **67% cost savings** on sub-agent operations ($1/$5 vs $3/$15 per million tokens)
+- **2x faster** response times compared to Sonnet 4
 - **Appropriate model** for each task's complexity level
 
-The main conversation uses your chosen model for complex decision-making, execution agents use the faster, more cost-effective Haiku 4.5, and house-planner uses Sonnet 4.5 for architectural planning.
+The main conversation uses your chosen model for complex decision-making, while execution agents use the faster, more cost-effective Haiku 4.5.
 
-**Note**: You can override this by editing agent files and changing `model: claude-haiku-4-5-20251001` or `model: claude-sonnet-4-5-20250929` to `model: inherit` to use the main conversation's model.
+**Note**: You can override this by editing agent files and changing `model: claude-haiku-4-5-20251001` to `model: inherit` to use the main conversation's model.
 
 ## Quick Start
 
@@ -145,19 +143,12 @@ Use house-coder to add a console.log statement at the start of the main function
 
 Expected: Should return a condensed summary with code snippet showing the change
 
-**6. Test House Planner:**
-```
-Use house-planner to create a plan for adding input validation to our forms
-```
-
-Expected: Should return an execution plan with task breakdown and agent assignments
-
-**7. Check agents are loaded:**
+**6. Check agents are loaded:**
 ```
 List all available sub-agents
 ```
 
-Expected: Should show all six house agents (house-research, house-git, house-bash, house-mcp, house-coder, house-planner)
+Expected: Should show all five house agents (house-research, house-git, house-bash, house-mcp, house-coder)
 
 **Troubleshooting:**
 - If agents don't show up, run `ls .claude/agents/` to verify files exist
@@ -306,33 +297,6 @@ All in condensed format (3k-8k tokens total instead of 50k+).
 - Full implementation in main: 8,000-15,000 tokens
 - House Coder summary: 1,000-1,500 tokens
 - Savings: ~85-90% context reduction
-
-### 🏗️ House Planner
-
-**Use For:**
-- Planning complex multi-file changes (3+ files)
-- Analyzing ambiguous requirements
-- Creating execution plans for new features
-- Orchestrating large refactoring efforts
-- Breaking down complex tasks into sub-tasks
-
-**Example Invocations:**
-```
-"Use house-planner to plan a JWT authentication system"
-"Create an execution plan for refactoring the API layer to async/await"
-"Plan the implementation of a new export feature for the dashboard"
-```
-
-**What It Returns:**
-- Detailed execution plan with numbered tasks
-- Agent assignments (which house agent for each task)
-- Complexity estimates (Low/Medium/High)
-- Dependency chains (sequential vs parallel)
-- Files to be created/modified
-- Clarifying questions (when requirements are ambiguous)
-- Risk assessment and recommendations
-
-**Note:** House Planner uses Sonnet 4.5 (not Haiku) for complex architectural reasoning. It can ask clarifying questions using the AskUserQuestion tool before creating plans.
 
 ## When to Use House Agents
 

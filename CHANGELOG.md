@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+- **house-planner agent** - Removed as Claude Code now includes a built-in Plan subagent with equivalent functionality
+  - Deleted `.claude/agents/house-planner.md`
+  - Deleted `examples/house-planner-coder-workflow.md`
+  - Updated all documentation to reference five agents instead of six
+  - Simplified model architecture section (all agents now use Haiku 4.5)
+
 ## [1.1.0] - 2025-11-02
 
 ### Added
